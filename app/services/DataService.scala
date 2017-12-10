@@ -38,7 +38,7 @@ case class DataService(airPorts: List[Airport], runways: List[Runway], countries
 
   // Input can be a partial country name or country code
   def searchCountry(input: String): List[(Country, List[(Airport, List[Runway])])] = {
-    val trimed = input.trim
+    val trimed = input.trim.toLowerCase
     searchByCountryCode(trimed) match {
       case Some(result) => result :: Nil
       case None =>
@@ -46,27 +46,28 @@ case class DataService(airPorts: List[Airport], runways: List[Runway], countries
     }
   }
 
-  def split[A](input: List[A]): (List[A], List[A]) = {
-    input.length match {
-      case 0 => (Nil, Nil)
-      case 1 => (input, Nil)
-      case  _ =>
-        val midIndex = input.length / 2 - 1
-        input.splitAt(midIndex)
-    }
-  }
-
 
   def reports(number: Int): Report = {
     val withAirportNumbers = byCountries.map { case (countryCode, results) =>
-      CountryReport(countriesByCode(countryCode), results.length, results.flatMap(_._2.map(_.surface)).toSet)
+      CountryReport(countriesByCode(countryCode.toLowerCase), results.length, results.flatMap(_._2.map(_.surface)).toSet)
     }.toList
     val sorted = withAirportNumbers.sortBy(_.airportCount)
-    val (lowest, highest) = split(sorted)
+    val (lowest, highest) = DataService.split(sorted)
     val takeLowest = lowest.take(number)
     val takeHIghest = highest.reverse.take(number)
     Report(takeHIghest, takeLowest)
   }
+}
 
 
+object DataService {
+  def split[A](input: List[A]): (List[A], List[A]) = {
+    input.length match {
+      case 0 => (Nil, Nil)
+      case 1 => (Nil, input)
+      case  _ =>
+        val midIndex = input.length / 2
+        input.splitAt(midIndex)
+    }
+  }
 }

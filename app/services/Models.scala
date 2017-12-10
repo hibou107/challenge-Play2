@@ -8,4 +8,4 @@ case class Country(code: String, name: String)
 
 case class CountryReport(country: Country, airportCount: Int, runWayTypes: Set[String])
 
-case class Report(highest: List[CountryReport], lower: List[CountryReport])
+case class Report(highest: List[CountryReport], lowest: List[CountryReport])
