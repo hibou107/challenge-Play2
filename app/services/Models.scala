@@ -1,6 +1,6 @@
 package services
 
-case class Airport(id: Int, name: String, idContry: String)
+case class Airport(id: Int, name: String, idCountry: String)
 
 case class Runway(id: Int, airPortId: Int, surface: String)
 
