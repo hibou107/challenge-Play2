@@ -66,11 +66,13 @@ object CSVLoader {
     }
   }
 
-  def main(args: Array[String]): Unit = {
-    val data = loadData("airports.csv", "runways.csv", "countries.csv").get
-    println(data.reports(10))
+//  def main(args: Array[String]): Unit = {
+//    val data = loadData("airports.csv", "runways.csv", "countries.csv").get
+//    println(data.reports(10))
+//  }
+}
 
-  }
-
-
+object DataSource {
+  // Our data is safe, I don't think we should add a error handling system here
+  val dataSource: DataService = CSVLoader.loadData("airports.csv", "runways.csv", "countries.csv").get
 }
