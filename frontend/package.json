@@ -1,0 +1,14 @@
+{
+  "dependencies": {
+    "css-loader": "^0.28.7",
+    "elm-webpack-loader": "^4.4.0",
+    "file-loader": "^1.1.5",
+    "style-loader": "^0.19.0",
+    "url-loader": "^0.6.2",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.9.7"
+  },
+  "scripts": {
+    "build": "webpack"
+  }
+}
