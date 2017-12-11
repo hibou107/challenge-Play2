@@ -48,7 +48,6 @@ case class DataService(airPorts: List[Airport], runways: List[Runway], countries
 
 
   def reports(number: Int): Report = {
-    println(countriesByCode)
     val withAirportNumbers = byCountries.map { case (countryCode, results) =>
       CountryReport(countriesByCode(countryCode.toLowerCase), results.length, results.flatMap(_._2.map(_.surface)).toSet)
     }.toList

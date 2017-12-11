@@ -2,9 +2,10 @@
 module Views exposing (..)
 
 import Html exposing (..)
-import Html.Attributes exposing (attribute, class, href)
-import Models exposing (Model)
-import Msgs exposing (Msg)
+import Html.Attributes exposing (attribute, class, href, type_)
+import Html.Events exposing (onClick)
+import Models exposing (Model, View(..))
+import Msgs exposing (Msg(ChangeView))
 
 
 
@@ -15,16 +16,41 @@ import Msgs exposing (Msg)
 
 navView: Model -> Html Msg
 navView model =
-    ul
-        [class "nav nav-tabs"]
+    let
+        render: String -> Bool -> Msg -> Html Msg
+        render message isActive onClickMsg =
+            li [attribute "role" "presentation", if isActive then class "active" else class ""] [a [onClick onClickMsg] [text message]]
+    in
+        ul
+            [class "nav nav-tabs"]
+            [
+                render "Query" (model.view == QueryView) (ChangeView QueryView),
+                render "Report" (model.view == ReportView) (ChangeView ReportView)
+            ]
+
+-- VIEW
+
+--<div class="input-group">
+--  <div class="input-group-btn">
+--    <button type="button" class="btn btn-primary">Apple</button>
+--    <!-- Button and dropdown menu -->
+--  </div>
+--  <input type="text" class="form-control" aria-label="...">
+--</div>
+
+queryView: Model -> Html Msg
+queryView model =
+    div [class "input-group"]
         [
-            li [attribute "role" "presentation", class "active"] [a [href "#"] [text "Query"]],
-            li [attribute "role" "presentation"] [a [href "#"] [text "Query"]]
+            div [class "input-group-btn"]
+                [
+                    button [type_ "button", class "btn btn-primary"]
+                        [text "Search"]
+                ]
+        ,   input [type_ "text", class "form-control"] []
         ]
 
 
-
--- VIEW
 
 
 view : Model -> Html Msg
@@ -32,5 +58,7 @@ view model =
     div []
         [
             navView model,
-            text model
+            case model.view of
+                QueryView -> queryView model
+                ReportView -> text "Hello"
         ]

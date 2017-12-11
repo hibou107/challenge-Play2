@@ -1,24 +1,22 @@
 module Main exposing (..)
 
 import Html exposing (Html, div, text, program)
-import Models exposing (Model)
+import Models exposing (Model, View(..))
 import Msgs exposing (Msg(..))
+import Update exposing (update)
 import Views exposing (view)
 
+initModel : Model
+initModel =
+    { view = QueryView
+    , queryResponse = Nothing
+    , reportResponse = Nothing
+    }
 
 init : ( Model, Cmd Msg )
 init =
-    ( "Hello", Cmd.none )
+    ( initModel, Cmd.none )
 
-
--- UPDATE
-
-
-update : Msg -> Model -> ( Model, Cmd Msg )
-update msg model =
-    case msg of
-        NoOp ->
-            ( model, Cmd.none )
 
 -- SUBSCRIPTIONS
 
@@ -26,8 +24,6 @@ update msg model =
 subscriptions : Model -> Sub Msg
 subscriptions model =
     Sub.none
-
-
 
 -- MAIN
 
