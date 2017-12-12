@@ -1,10 +1,15 @@
 module Msgs exposing (..)
 
-import Models exposing (View)
+import Models exposing (Report, SearchResponse, View)
 
 
 -- MESSAGES
 
 
 type Msg
-    = NoOp | ChangeView View
+    = NoOp
+        | ChangeView View
+        | DoSearch
+        | OnSearchResult SearchResponse
+        | OnReportResult Report
+        | OnError String

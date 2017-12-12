@@ -9,6 +9,8 @@ import Views exposing (view)
 initModel : Model
 initModel =
     { view = QueryView
+    , error = Nothing
+    , query = ""
     , queryResponse = Nothing
     , reportResponse = Nothing
     }

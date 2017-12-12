@@ -44,8 +44,13 @@ type alias Report =
     }
 
 
+
+type alias SearchResponse = List (Country, List (Airport, List Runway))
+
 type alias Model =
      { view : View
-      , queryResponse : Maybe (List (Country, List (Airport, List Runway)))
+      , error : Maybe String
+      , query: String
+      , queryResponse : Maybe SearchResponse
       , reportResponse : Maybe Report
       }
