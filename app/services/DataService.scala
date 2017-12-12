@@ -1,6 +1,9 @@
 package services
 
 case class DataService(airPorts: List[Airport], runways: List[Runway], countries: List[Country]) {
+
+  val MAX_SEARCH_RESULT = 10
+
   private val byCountries: Map[String, List[(Airport, List[Runway])]] = {
     val runWayByAirport = runways.groupBy(_.airPortId)
     val airPortByIds = airPorts.groupBy(_.id).mapValues(_.head).view.force
@@ -8,7 +11,7 @@ case class DataService(airPorts: List[Airport], runways: List[Runway], countries
         val thisRunWays = runWayByAirport.getOrElse(airPortId, Nil)
       (airPort, thisRunWays)
     }
-    airportWithRunways.toList.groupBy(_._1.idCountry)
+    airportWithRunways.toList.groupBy(_._1.idCountry).map { case (key, v) => (key.toLowerCase(), v) }
   }
 
   private val countriesByCode: Map[String, Country] =
@@ -28,11 +31,13 @@ case class DataService(airPorts: List[Airport], runways: List[Runway], countries
       case None =>
         val init = List.empty[(Country, List[(Airport, List[Runway])])]
         countriesByName.foldLeft(init) { case (currentResult, (countryName, country)) =>
+          if (currentResult.length > MAX_SEARCH_RESULT)
+            currentResult
+          else
             if (countryName.startsWith(name)) {
               (country, byCountries(country.code)) :: currentResult
             } else currentResult
         }
-
     }
   }
 

@@ -74,6 +74,7 @@ class ServiceTests extends FlatSpec with Matchers {
     report.highest.head.country.code shouldBe "US"
     report.highest.head.airportCount shouldBe 3
     report.highest.head.runWayTypes shouldBe Set("x", "y")
-
   }
+
+
 }
