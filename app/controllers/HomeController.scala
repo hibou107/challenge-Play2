@@ -9,7 +9,7 @@ import services.JsonSerializers._
 class HomeController extends Controller {
 
   def index: Action[AnyContent] = Action {
-    Ok("Hello")
+    Redirect("/assets/index.html")
   }
 
   def search(): Action[JsValue] = Action(parse.json) { request: Request[JsValue] =>
