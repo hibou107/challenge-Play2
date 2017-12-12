@@ -10,7 +10,6 @@ class RealDataTests extends FlatSpec with Matchers {
     report.lowest.size shouldBe 10
     data.searchCountry("test") shouldBe Nil
     data.searchCountry("us").size shouldBe 1
-    data.searchCountry("").size shouldBe 0
-
+    data.searchCountry("france").size should not be Nil
   }
 }

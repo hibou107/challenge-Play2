@@ -27,7 +27,7 @@ case class DataService(airPorts: List[Airport], runways: List[Runway], countries
   private def searchByCountryName(name: String): List[(Country, List[(Airport, List[Runway])])] = {
     countriesByName.get(name) match {
       case Some(v) =>
-        (v, byCountries(v.code)) :: Nil
+        (v, byCountries(v.code.toLowerCase())) :: Nil
       case None =>
         val init = List.empty[(Country, List[(Airport, List[Runway])])]
         countriesByName.foldLeft(init) { case (currentResult, (countryName, country)) =>
@@ -35,7 +35,7 @@ case class DataService(airPorts: List[Airport], runways: List[Runway], countries
             currentResult
           else
             if (countryName.startsWith(name)) {
-              (country, byCountries(country.code)) :: currentResult
+              (country, byCountries(country.code.toLowerCase)) :: currentResult
             } else currentResult
         }
     }

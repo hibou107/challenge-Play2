@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Commands exposing (searchCommand)
+import Commands exposing (reportCommand, searchCommand)
 import Models exposing (Model)
 import Msgs exposing (..)
 
@@ -18,7 +18,11 @@ update msg model =
         DoSearch -> ( model, searchCommand model.query)
         OnSearchResult result ->
             ( { model | queryResponse = Just result }, Cmd.none )
+        DoReport ->
+            ( model, reportCommand )
         OnReportResult result ->
             ( { model | reportResponse = Just result }, Cmd.none )
         OnError err ->
             ( { model | error = Just err }, Cmd.none )
+        OnUpdateQuery value ->
+            ( { model | query = value }, Cmd.none )

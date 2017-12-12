@@ -9162,9 +9162,13 @@ var _user$project$Models$Model = F5(
 var _user$project$Models$ReportView = {ctor: 'ReportView'};
 var _user$project$Models$QueryView = {ctor: 'QueryView'};
 
+var _user$project$Msgs$OnUpdateQuery = function (a) {
+	return {ctor: 'OnUpdateQuery', _0: a};
+};
 var _user$project$Msgs$OnError = function (a) {
 	return {ctor: 'OnError', _0: a};
 };
+var _user$project$Msgs$DoReport = {ctor: 'DoReport'};
 var _user$project$Msgs$OnReportResult = function (a) {
 	return {ctor: 'OnReportResult', _0: a};
 };
@@ -9299,6 +9303,8 @@ var _user$project$Update$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			case 'DoReport':
+				return {ctor: '_Tuple2', _0: model, _1: _user$project$Commands$reportCommand};
 			case 'OnReportResult':
 				return {
 					ctor: '_Tuple2',
@@ -9309,7 +9315,7 @@ var _user$project$Update$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
-			default:
+			case 'OnError':
 				return {
 					ctor: '_Tuple2',
 					_0: _elm_lang$core$Native_Utils.update(
@@ -9319,12 +9325,152 @@ var _user$project$Update$update = F2(
 						}),
 					_1: _elm_lang$core$Platform_Cmd$none
 				};
+			default:
+				return {
+					ctor: '_Tuple2',
+					_0: _elm_lang$core$Native_Utils.update(
+						model,
+						{query: _p0._0}),
+					_1: _elm_lang$core$Platform_Cmd$none
+				};
 		}
 	});
 
-var _user$project$Views$warningView = function (model) {
-	var _p0 = model.error;
+var _user$project$Views$reportResultView = function (report) {
+	var renderCountryReport = function (countryReport) {
+		return {
+			ctor: '::',
+			_0: A2(
+				_elm_lang$html$Html$h3,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text(countryReport.country.name),
+					_1: {ctor: '[]'}
+				}),
+			_1: {
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$ul,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: A2(
+							_elm_lang$html$Html$li,
+							{ctor: '[]'},
+							{
+								ctor: '::',
+								_0: _elm_lang$html$Html$text(
+									A2(
+										_elm_lang$core$Basics_ops['++'],
+										'Airport count: ',
+										_elm_lang$core$Basics$toString(countryReport.airportCount))),
+								_1: {ctor: '[]'}
+							}),
+						_1: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$li,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text(
+										A2(
+											_elm_lang$core$Basics_ops['++'],
+											'Runway types: ',
+											A2(_elm_lang$core$String$join, ',', countryReport.runWayTypes))),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						}
+					}),
+				_1: {ctor: '[]'}
+			}
+		};
+	};
+	return A2(
+		_elm_lang$html$Html$div,
+		{ctor: '[]'},
+		_elm_lang$core$List$concat(
+			{
+				ctor: '::',
+				_0: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$h2,
+						{ctor: '[]'},
+						{
+							ctor: '::',
+							_0: _elm_lang$html$Html$text('Highest'),
+							_1: {ctor: '[]'}
+						}),
+					_1: {ctor: '[]'}
+				},
+				_1: {
+					ctor: '::',
+					_0: _elm_lang$core$List$concat(
+						A2(_elm_lang$core$List$map, renderCountryReport, report.highest)),
+					_1: {
+						ctor: '::',
+						_0: {
+							ctor: '::',
+							_0: A2(
+								_elm_lang$html$Html$h2,
+								{ctor: '[]'},
+								{
+									ctor: '::',
+									_0: _elm_lang$html$Html$text('Lowest'),
+									_1: {ctor: '[]'}
+								}),
+							_1: {ctor: '[]'}
+						},
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$core$List$concat(
+								A2(_elm_lang$core$List$map, renderCountryReport, report.lowest)),
+							_1: {ctor: '[]'}
+						}
+					}
+				}
+			}));
+};
+var _user$project$Views$reportPageView = function (model) {
+	var _p0 = model.reportResponse;
 	if (_p0.ctor === 'Just') {
+		return _user$project$Views$reportResultView(_p0._0);
+	} else {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$button,
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$type_('button'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Attributes$class('btn btn-primary'),
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$DoReport),
+								_1: {ctor: '[]'}
+							}
+						}
+					},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text('Generate report'),
+						_1: {ctor: '[]'}
+					}),
+				_1: {ctor: '[]'}
+			});
+	}
+};
+var _user$project$Views$warningView = function (model) {
+	var _p1 = model.error;
+	if (_p1.ctor === 'Just') {
 		return A2(
 			_elm_lang$html$Html$div,
 			{
@@ -9338,7 +9484,7 @@ var _user$project$Views$warningView = function (model) {
 			},
 			{
 				ctor: '::',
-				_0: _elm_lang$html$Html$text(_p0._0),
+				_0: _elm_lang$html$Html$text(_p1._0),
 				_1: {ctor: '[]'}
 			});
 	} else {
@@ -9348,27 +9494,95 @@ var _user$project$Views$warningView = function (model) {
 			{ctor: '[]'});
 	}
 };
+var _user$project$Views$queryResultView = function (model) {
+	var renderRunways = function (runway) {
+		return A2(
+			_elm_lang$html$Html$li,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_elm_lang$core$Basics$toString(runway.id),
+						runway.surface)),
+				_1: {ctor: '[]'}
+			});
+	};
+	var renderAirport = function (_p2) {
+		var _p3 = _p2;
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: A2(
+					_elm_lang$html$Html$h4,
+					{ctor: '[]'},
+					{
+						ctor: '::',
+						_0: _elm_lang$html$Html$text(_p3._0.name),
+						_1: {ctor: '[]'}
+					}),
+				_1: {
+					ctor: '::',
+					_0: A2(
+						_elm_lang$html$Html$ul,
+						{ctor: '[]'},
+						A2(_elm_lang$core$List$map, renderRunways, _p3._1)),
+					_1: {ctor: '[]'}
+				}
+			});
+	};
+	var renderCountry = function (_p4) {
+		var _p5 = _p4;
+		var _p6 = _p5._0;
+		return A2(
+			_elm_lang$html$Html$h3,
+			{ctor: '[]'},
+			{
+				ctor: '::',
+				_0: _elm_lang$html$Html$text(
+					A2(
+						_elm_lang$core$Basics_ops['++'],
+						_p6.name,
+						A2(
+							_elm_lang$core$Basics_ops['++'],
+							' (',
+							A2(_elm_lang$core$Basics_ops['++'], _p6.code, ')')))),
+				_1: A2(_elm_lang$core$List$map, renderAirport, _p5._1)
+			});
+	};
+	var _p7 = model.queryResponse;
+	if (_p7.ctor === 'Nothing') {
+		return A2(
+			_elm_lang$html$Html$div,
+			{ctor: '[]'},
+			{ctor: '[]'});
+	} else {
+		if (_p7._0.ctor === '[]') {
+			return A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				{
+					ctor: '::',
+					_0: _elm_lang$html$Html$text('No Results'),
+					_1: {ctor: '[]'}
+				});
+		} else {
+			return A2(
+				_elm_lang$html$Html$div,
+				{ctor: '[]'},
+				A2(_elm_lang$core$List$map, renderCountry, _p7._0));
+		}
+	}
+};
 var _user$project$Views$queryView = function (model) {
 	var showResult = function (result) {
 		return A2(
 			_elm_lang$html$Html$div,
 			{ctor: '[]'},
 			{ctor: '[]'});
-	};
-	var queryResultView = function (model) {
-		var _p1 = model.queryResponse;
-		if (_p1.ctor === 'Nothing') {
-			return A2(
-				_elm_lang$html$Html$div,
-				{ctor: '[]'},
-				{
-					ctor: '::',
-					_0: _elm_lang$html$Html$text('No result yet'),
-					_1: {ctor: '[]'}
-				});
-		} else {
-			return showResult(_p1._0);
-		}
 	};
 	return A2(
 		_elm_lang$html$Html$div,
@@ -9380,34 +9594,23 @@ var _user$project$Views$queryView = function (model) {
 		{
 			ctor: '::',
 			_0: A2(
-				_elm_lang$html$Html$div,
+				_elm_lang$html$Html$button,
 				{
 					ctor: '::',
-					_0: _elm_lang$html$Html_Attributes$class('input-group-btn'),
-					_1: {ctor: '[]'}
+					_0: _elm_lang$html$Html_Attributes$type_('button'),
+					_1: {
+						ctor: '::',
+						_0: _elm_lang$html$Html_Attributes$class('btn btn-primary'),
+						_1: {
+							ctor: '::',
+							_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$DoSearch),
+							_1: {ctor: '[]'}
+						}
+					}
 				},
 				{
 					ctor: '::',
-					_0: A2(
-						_elm_lang$html$Html$button,
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html_Attributes$type_('button'),
-							_1: {
-								ctor: '::',
-								_0: _elm_lang$html$Html_Attributes$class('btn btn-primary'),
-								_1: {
-									ctor: '::',
-									_0: _elm_lang$html$Html_Events$onClick(_user$project$Msgs$DoSearch),
-									_1: {ctor: '[]'}
-								}
-							}
-						},
-						{
-							ctor: '::',
-							_0: _elm_lang$html$Html$text('Search'),
-							_1: {ctor: '[]'}
-						}),
+					_0: _elm_lang$html$Html$text('Search'),
 					_1: {ctor: '[]'}
 				}),
 			_1: {
@@ -9420,11 +9623,19 @@ var _user$project$Views$queryView = function (model) {
 						_1: {
 							ctor: '::',
 							_0: _elm_lang$html$Html_Attributes$class('form-control'),
-							_1: {ctor: '[]'}
+							_1: {
+								ctor: '::',
+								_0: _elm_lang$html$Html_Events$onInput(_user$project$Msgs$OnUpdateQuery),
+								_1: {ctor: '[]'}
+							}
 						}
 					},
 					{ctor: '[]'}),
-				_1: {ctor: '[]'}
+				_1: {
+					ctor: '::',
+					_0: _user$project$Views$queryResultView(model),
+					_1: {ctor: '[]'}
+				}
 			}
 		});
 };
@@ -9497,11 +9708,11 @@ var _user$project$Views$view = function (model) {
 				_1: {
 					ctor: '::',
 					_0: function () {
-						var _p2 = model.view;
-						if (_p2.ctor === 'QueryView') {
+						var _p8 = model.view;
+						if (_p8.ctor === 'QueryView') {
 							return _user$project$Views$queryView(model);
 						} else {
-							return _elm_lang$html$Html$text('Hello');
+							return _user$project$Views$reportPageView(model);
 						}
 					}(),
 					_1: {ctor: '[]'}

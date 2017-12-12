@@ -12,4 +12,6 @@ type Msg
         | DoSearch
         | OnSearchResult SearchResponse
         | OnReportResult Report
+        | DoReport
         | OnError String
+        | OnUpdateQuery String
